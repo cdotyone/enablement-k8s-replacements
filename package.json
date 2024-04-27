@@ -1,9 +1,10 @@
 {
   "name": "enablement-version-replace",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
-  "main": "index.js",
-  "bin": "./index.js",
+  "main": "index.mjs",
+  "bin": "./index.mjs",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/cdotyone/enablement-version-replace.git"
