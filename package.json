@@ -1,0 +1,23 @@
+{
+  "name": "enablement-version-replace",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "bin": "./index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cdotyone/enablement-version-replace.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "scripts": {
+    "test": "node ./run.js"
+  },
+  "keywords": [],
+  "author": "Chris Doty",
+  "license": "MIT",
+  "dependencies": {
+    "globby": "^13.2.2"
+  }
+}
