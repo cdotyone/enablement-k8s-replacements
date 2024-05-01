@@ -27,7 +27,7 @@ async function main(options) {
 	    if(options.scanPackage) {
         const pkgs = await globby("**/package.json");
         for(let f=0;f<pkgs.length;f++) {
-          let pkg = pkgs[i];
+          let pkg = pkgs[f];
               if(options.debug) console.log(`package ${pkg}`);
               pkg=JSON.parse(fs.readFileSync(pkg,"utf8"));
           let name = pkg.name.split('/');
