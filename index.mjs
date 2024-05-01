@@ -13,15 +13,28 @@ async function main(options) {
       if(options.debug) console.log(`versionFile ${versionFile}`);
       let versions=JSON.parse(fs.readFileSync(versionFile,"utf8"));
 
-	  // if package.json was passed then add it to the versions file.
-	  if(options.package) {
-		let pkg = options.package;
-      	if(options.debug) console.log(`package ${pkg}`);
-      	pkg=JSON.parse(fs.readFileSync(pkg,"utf8"));
-		let name = pkg.name.split('/');
-		name=name[name.length-1];
-		versions[name]=pkg.version;
-	  }
+      // if package.json was passed then add it to the versions file.
+      if(options.package) {
+      let pkg = options.package;
+          if(options.debug) console.log(`package ${pkg}`);
+          pkg=JSON.parse(fs.readFileSync(pkg,"utf8"));
+      let name = pkg.name.split('/');
+      name=name[name.length-1];
+      versions[name]=pkg.version;
+      }
+
+      // if package.json was passed then add it to the versions file.
+	    if(options.scanPackage) {
+        const pkgs = await globby("**/package.json");
+        for(let f=0;f<pkgs.length;f++) {
+          let pkg = pkgs[i];
+              if(options.debug) console.log(`package ${pkg}`);
+              pkg=JSON.parse(fs.readFileSync(pkg,"utf8"));
+          let name = pkg.name.split('/');
+          name=name[name.length-1];
+          versions[name]=pkg.version;
+        }
+      }
 
       let keys = Object.keys(versions);
 
@@ -66,6 +79,7 @@ let options = {
   searchPatterns:["k8s/**/*.yaml"],
   versionFile:"versions.json",
   package:"",
+  scanPackage:false,
   debug:false,
   update: true
 };
@@ -73,6 +87,7 @@ let options = {
 
 let argv = process.argv;
 for(let i=2;i<argv.length;i++) {
+  if(argv[i].toLocaleLowerCase()==="--scanpackage") { options.scanPackage=true; continue; }
   if(argv[i]==="--noupdate") { options.push=false; continue; }
   if(argv[i]==="--debug") { options.debug=true; continue; }
   if(argv[i].substring(0,2)==="--") {
