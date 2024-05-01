@@ -15,21 +15,21 @@ async function main(options) {
 
       // if package.json was passed then add it to the versions file.
       if(options.package) {
-      let pkg = options.package;
-          if(options.debug) console.log(`package ${pkg}`);
-          pkg=JSON.parse(fs.readFileSync(pkg,"utf8"));
-      let name = pkg.name.split('/');
-      name=name[name.length-1];
-      versions[name]=pkg.version;
+        let pkg = options.package;
+        if(options.debug) console.log(`package ${pkg}`);
+        pkg=JSON.parse(fs.readFileSync(pkg,"utf8"));
+        let name = pkg.name.split('/');
+        name=name[name.length-1];
+        versions[name]=pkg.version;
       }
 
       // if package.json was passed then add it to the versions file.
 	    if(options.scanPackage) {
-        const pkgs = await globby("**/package.json");
+        const pkgs = await globby(["**/package.json","package.json","!node_modules"]);
         for(let f=0;f<pkgs.length;f++) {
           let pkg = pkgs[f];
-              if(options.debug) console.log(`package ${pkg}`);
-              pkg=JSON.parse(fs.readFileSync(pkg,"utf8"));
+          if(options.debug) console.log(`package ${pkg}`);
+          pkg=JSON.parse(fs.readFileSync(pkg,"utf8"));
           let name = pkg.name.split('/');
           name=name[name.length-1];
           versions[name]=pkg.version;
