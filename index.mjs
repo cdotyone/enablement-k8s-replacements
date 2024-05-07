@@ -83,7 +83,7 @@ async function main(options) {
 }
 
 let options = {
-  searchPatterns:["k8s/**/*.yaml"],
+  searchPatterns:["**/*.yaml"],
   versionFile:"versions.json",
   package:"",
   scanPackage:false,
