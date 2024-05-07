@@ -8,10 +8,7 @@ async function main(options) {
       // get a list of yaml files
       const basePaths = await globby(options.searchPatterns);
 
-      // lof the version file for the environment
-      let versionFile = options.versionFile;
-      if(options.debug) console.log(`versionFile ${versionFile}`);
-      let versions=JSON.parse(fs.readFileSync(versionFile,"utf8"));
+      let versions = {};
 
       // if package.json was passed then add it to the versions file.
       if(options.package) {
@@ -24,7 +21,7 @@ async function main(options) {
       }
 
       // if package.json was passed then add it to the versions file.
-	    if(options.scanPackage) {
+      if(options.scanPackage) {
         const pkgs = await globby(["**/package.json","package.json","!node_modules"]);
         for(let f=0;f<pkgs.length;f++) {
           let pkg = pkgs[f];
@@ -34,6 +31,16 @@ async function main(options) {
           name=name[name.length-1];
           versions[name]=pkg.version;
         }
+      }
+
+      // version files are applied in order, and overwrite package versions.
+      let versionFile = options.versionFile.split(',');
+      if(options.debug) console.log(`versionFile ${versionFile}`);
+      for(let i=0;i<versionFile.length;i++) {
+        let v = JSON.parse(fs.readFileSync(versionFile[i].trim(),"utf8"));
+        Object.keys(v).forEach(function (key) {
+          versions[key]==v[key];
+        });
       }
 
       let keys = Object.keys(versions);
