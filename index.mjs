@@ -35,14 +35,15 @@ async function main(options) {
 
       // version files are applied in order, and overwrite package versions.
       let versionFile = options.versionFile.split(',');
-      if(options.debug) console.log(`versionFile ${versionFile}`);
       for(let i=0;i<versionFile.length;i++) {
+        if(options.debug) console.log(`reading versionFile ${versionFile[i]}`);
         let v = JSON.parse(fs.readFileSync(versionFile[i].trim(),"utf8"));
         Object.keys(v).forEach(function (key) {
-          versions[key]==v[key];
+          versions[key]=v[key];
         });
       }
 
+      if(options.debug) console.log('versions',JSON.stringify(versions,null,2));
       let keys = Object.keys(versions);
 
       // loop through all matching yaml files
