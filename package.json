@@ -1,13 +1,13 @@
 {
-  "name": "enablement-version-replace",
-  "version": "0.8.0",
+  "name": "enablement-k8s-replacements",
+  "version": "0.1.0",
   "description": "",
   "main": "index.mjs",
   "bin": "./index.mjs",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cdotyone/enablement-version-replace.git"
+    "url": "https://github.com/cdotyone/enablement-k8s-replacements.git"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
@@ -19,6 +19,8 @@
   "author": "Chris Doty",
   "license": "MIT",
   "dependencies": {
-    "globby": "^13.2.2"
+    "globby": "^13.2.2",
+    "js-yaml": "^4.1.0",
+    "lodash": "^4.17.21"
   }
 }
