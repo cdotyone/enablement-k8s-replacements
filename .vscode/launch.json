@@ -14,7 +14,7 @@
             "runtimeExecutable": "node",
             "runtimeArgs": [
                 ".\\index.mjs",
-                "--debug",
+                "--test",
                 "--versionFile",
                 "tests\\replacements.json,tests\\versions.json"
             ]

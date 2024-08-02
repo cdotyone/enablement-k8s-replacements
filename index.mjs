@@ -226,7 +226,7 @@ async function main(options) {
         // check to see if something changed, write file if it did
         if(before!==after) {
           console.log(`update ${basePaths[f]}`);
-          if(options.debug) fs.writeFileSync(basePaths[f]+".debug",after);
+          if(options.test) fs.writeFileSync(basePaths[f]+".debug",after);
           else if(options.update) fs.writeFileSync(basePaths[f],after);
         }
       }
@@ -243,6 +243,7 @@ let options = {
   versionFile:"tests/versions.json",
   scanPackage:false,
   debug:false,
+  test:false,
   update: true
 };
 
@@ -252,6 +253,7 @@ for(let i=2;i<argv.length;i++) {
   if(argv[i].toLocaleLowerCase()==="--scanpackage") { options.scanPackage=true; continue; }
   if(argv[i]==="--noupdate") { options.push=false; continue; }
   if(argv[i]==="--debug") { options.debug=true; continue; }
+  if(argv[i]==="--test") { options.test=true; continue; }
   if(argv[i].substring(0,2)==="--") {
       let name = argv[i].substring(2);
       if(options[name]!==undefined) {
