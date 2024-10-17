@@ -125,7 +125,7 @@ async function main(options) {
         versions:{},
         replicas:{_default:0},
         resources:{_defaults:{requests:{},limits:{}}},
-        strings:{}
+        strings:{_defaults:{}}
       }
       let versions = config.versions;
       let replicas = config.replicas;
@@ -179,9 +179,9 @@ async function main(options) {
               let name = nameMatch[0].split(":")[1].trim();
 
               const hash = md5(before);
-              name=`hash(${name})`;
-              if(options.debug) console.log(name,hash);
-              strings[name] = `"${hash}"`;
+              name=`#${name}#`;
+              if(options.debug) console.log(name,hash,strings._defaults);
+              strings._defaults[name] = `${hash}`;
             }
           }
         }
@@ -222,9 +222,8 @@ async function main(options) {
               if(!strings[key]) strings[key]=r[key];
               else {
                 let o=r[key];
-                replicas[key]=replicas[key] || {};
                 Object.keys(o).forEach(function (key2) {
-                  replicas[key][key2]=o[key2];
+                  strings[key][key2]=o[key2];
                 });
               }
             });
