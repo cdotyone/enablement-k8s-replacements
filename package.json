@@ -1,6 +1,6 @@
 {
   "name": "enablement-k8s-replacements",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "",
   "main": "index.mjs",
   "bin": "./index.mjs",
@@ -21,9 +21,7 @@
   "dependencies": {
     "globby": "^13.2.2",
     "js-yaml": "^4.1.0",
-    "lodash": "^4.17.21"
-  },
-  "devDependencies": {
+    "lodash": "^4.17.21",
     "md5": "^2.3.0"
   }
 }
