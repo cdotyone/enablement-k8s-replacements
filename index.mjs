@@ -2,6 +2,7 @@
 import {globby} from "globby";
 import yaml from 'js-yaml';
 import get from "lodash/get.js";
+import md5 from 'md5';
 import findKey from "lodash/findKey.js";
 import fs from "fs";
 
@@ -118,6 +119,7 @@ async function main(options) {
     var value = new Promise(async (resolve, reject) => {
       // get a list of yaml files
       const basePaths = await globby(options.searchPatterns);
+      console.log("GLOBBY",options.searchPatterns,basePaths);
 
       let config = {
         versions:{},
@@ -148,8 +150,42 @@ async function main(options) {
       // config files are applied in order, and overwrite package versions.
       let versionFile = options.versionFile.split(',');
       for(let i=0;i<versionFile.length;i++) {
+        if(!fs.existsSync(versionFile[i].trim()))  {
+          console.log(`versionFile ${versionFile[i]} - not found`);
+          continue;
+        }
         if(options.debug) console.log(`reading versionFile ${versionFile[i]}`);
+
         let c = JSON.parse(fs.readFileSync(versionFile[i].trim(),"utf8"));
+
+
+        // loop through all matching yaml files looking for configmaps
+        const configMaps=c?.strings?.configMaps || "";
+        if(configMaps) {
+          if(options.debug) console.log(`looking for configmaps ${configMaps}`);
+          for(let f=0;f<basePaths.length;f++) {
+            if(basePaths[f].indexOf(configMaps || "")<0) continue;
+
+            let before = fs.readFileSync(basePaths[f],"utf8");
+
+            if(before.match(/kind:\sConfigMap/g)?.length>0) {
+              if(options.debug) console.log(`found configmap ${basePaths[f]}`);
+
+              let nameMatch = before.match(/^metadata:.*[\n\r]\s+name:\s+([A-Za-z0-9--_]+)/m);
+              if(!nameMatch) continue;  // does not have a name so bounce
+              nameMatch = nameMatch[0].match(/name:\s+([A-Za-z0-9--_]+)/m);
+              if(!nameMatch) continue;  // does not have a name so bounce
+              if(options.debug) console.log(nameMatch[0]);
+              let name = nameMatch[0].split(":")[1].trim();
+
+              const hash = md5(before);
+              name=`hash(${name})`;
+              if(options.debug) console.log(name,hash);
+              strings[name] = `"${hash}"`;
+            }
+          }
+        }
+
 
         let v = c;
         if(c.versions || c.resources || c.replicas || c.strings) {
