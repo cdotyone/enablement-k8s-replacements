@@ -141,8 +141,10 @@ async function main(options) {
           if(pkg.indexOf('node_modules')>=0) continue;
           pkg=JSON.parse(fs.readFileSync(pkg,"utf8"));
           let name = pkg.name
-          if(pkg.name.indexOf('/')>=0) name=name.split('/');
-          name=name[name.length-1];
+          if(pkg.name.indexOf('/')>=0) {
+            name=name.split('/');
+            name=name[name.length-1];
+          }
           versions[name]=pkg.version;
         }
       }
